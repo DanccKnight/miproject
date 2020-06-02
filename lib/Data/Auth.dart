@@ -9,30 +9,29 @@ class Auth {
   static final GoogleSignIn _googleSignIn = GoogleSignIn();
   static final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  //method to create a new user
-  static void updateUserCollection() async {
+  static void updateUserCollection(firebaseUser) async {
+    //if user is a new user, upload his details with isAdmin = false
+    //if he's an existing user, don't upload his details
     if (UserSingleton().fireUser != null) {
       final QuerySnapshot querySnapshot = await Firestore.instance
           .collection("Users")
-          .where('id', isEqualTo: UserSingleton().user.uid)
+          .where('uid', isEqualTo: UserSingleton().fireUser.uid)
           .getDocuments();
       final List<DocumentSnapshot> documents = querySnapshot.documents;
       if (documents.isEmpty) {
         Firestore.instance
             .collection("Users")
-            .document(UserSingleton().user.uid)
-            .setData(UserSingleton().user.toJson());
+            .document(UserSingleton().fireUser.uid)
+            .setData({
+          'name': UserSingleton().fireUser.displayName,
+          'email': UserSingleton().fireUser.email,
+          'profileImage': UserSingleton().fireUser.photoUrl,
+          'token': await _firebaseMessaging.getToken(),
+          'uid': UserSingleton().fireUser.uid,
+          'isAdmin': false
+        });
       }
     }
-  }
-
-  static void setUserData(FirebaseUser fireUser) async {
-    UserSingleton().user.name = fireUser.displayName;
-    UserSingleton().user.email = fireUser.email;
-    UserSingleton().user.uid = fireUser.uid;
-    UserSingleton().user.profileImage = fireUser.photoUrl;
-    UserSingleton().user.token = await _firebaseMessaging.getToken();
-    UserSingleton().user.isAdmin = false;
   }
 
   static Future<bool> signInWithGoogle() async {
@@ -47,14 +46,14 @@ class Auth {
       final FirebaseUser firebaseUser =
           (await _auth.signInWithCredential(authCredential)).user;
       var currentUser = await _auth.currentUser();
-      setUserData(firebaseUser);
       UserSingleton().fireUser = firebaseUser;
-      print(UserSingleton().fireUser.displayName);
-      Auth.updateUserCollection();
-      if (currentUser != null) return true;
+      Auth.updateUserCollection(firebaseUser);
+      if (currentUser != null)
+        return true;
       return false;
     } catch (e) {
       print(e);
+      return false;
     }
   }
 

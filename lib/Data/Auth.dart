@@ -28,7 +28,6 @@ class Auth {
           'profileImage': UserSingleton().fireUser.photoUrl,
           'token': await _firebaseMessaging.getToken(),
           'uid': UserSingleton().fireUser.uid,
-          'isAdmin': false
         });
       }
     }

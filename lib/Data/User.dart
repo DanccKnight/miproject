@@ -8,10 +8,9 @@ class User {
   String uid;
   String email;
   String profileImage;
-  bool isAdmin;
   String token;
 
-  User({this.name, this.uid, this.email, this.profileImage, this.isAdmin, this.token});
+  User({this.name, this.uid, this.email, this.profileImage, this.token});
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 

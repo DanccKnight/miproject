@@ -9,18 +9,16 @@ class Auth {
   static final GoogleSignIn _googleSignIn = GoogleSignIn();
   static final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  static void updateUserCollection(firebaseUser) async {
-    //if user is a new user, upload his details with isAdmin = false
-    //if he's an existing user, don't upload his details
+  static void updateAdminCollection(firebaseUser) async {
     if (UserSingleton().fireUser != null) {
       final QuerySnapshot querySnapshot = await Firestore.instance
-          .collection("Users")
+          .collection("Admins")
           .where('uid', isEqualTo: UserSingleton().fireUser.uid)
           .getDocuments();
       final List<DocumentSnapshot> documents = querySnapshot.documents;
       if (documents.isEmpty) {
         Firestore.instance
-            .collection("Users")
+            .collection("Admins")
             .document(UserSingleton().fireUser.uid)
             .setData({
           'name': UserSingleton().fireUser.displayName,
@@ -46,7 +44,7 @@ class Auth {
           (await _auth.signInWithCredential(authCredential)).user;
       var currentUser = await _auth.currentUser();
       UserSingleton().fireUser = firebaseUser;
-      Auth.updateUserCollection(firebaseUser);
+      Auth.updateAdminCollection(firebaseUser);
       if (currentUser != null)
         return true;
       return false;

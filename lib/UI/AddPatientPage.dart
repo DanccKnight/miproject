@@ -249,6 +249,25 @@ class _AddPatientPageState extends State<AddPatientPage> {
                 ),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.only(left: 25),
+              child: Container(
+                height: 35,
+                width: 140,
+                decoration: BoxDecoration(
+                  color: Colors.grey.withOpacity(0.12),
+                  borderRadius: BorderRadius.circular(8)
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Text("Patient Details",style: TextStyle(
+                    fontSize: 22,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
+                  )),
+                ),
+              ),
+            ),
             Form(
               key: _formKey,
               child: Stepper(

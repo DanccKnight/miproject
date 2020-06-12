@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:miproject/UI/HomePage.dart';
 import 'package:miproject/UI/SignInPage.dart';
+import 'package:miproject/UI/AddPatientPage.dart';
 
 void main() {
   runApp(MyApp());
@@ -40,6 +41,7 @@ class _MyAppState extends State<MyApp> {
       routes: <String,WidgetBuilder>{
         '/SignInPage': (BuildContext context) => SignInPage(),
         '/HomePage': (BuildContext context) => HomePage(),
+        '/AddPatientPage': (BuildContext context) => AddPatientPage()
       },
     );
   }

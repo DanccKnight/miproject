@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:miproject/Data/Auth.dart';
 import 'package:miproject/Data/UserSingleton.dart';
 
@@ -11,11 +13,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
   void initState() {
-    if(UserSingleton().fireUser ==  null){
-      updateUserDetails().then((value) => setState((){}));
+    if (UserSingleton().fireUser == null) {
+      updateUserDetails().then((value) => setState(() {}));
     }
     super.initState();
   }
@@ -29,15 +30,20 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          title: Text("MiProject"),
-        ),
         drawer: Drawer(
           child: ListView(
             padding: EdgeInsets.all(0),
             children: <Widget>[
               UserAccountsDrawerHeader(
+                decoration: BoxDecoration(
+                    color: Color(0xFF11249F),
+                    gradient: LinearGradient(
+                        begin: Alignment.topRight,
+                        end: Alignment.bottomLeft,
+                        colors: [
+                          Color(0xFF3383CD),
+                          Colors.blue.withOpacity(0.85)
+                        ])),
                 accountName: UserSingleton().fireUser == null
                     ? Text('name')
                     : Text(UserSingleton().fireUser.displayName),
@@ -47,11 +53,11 @@ class _HomePageState extends State<HomePage> {
                 currentAccountPicture: GestureDetector(
                   child: UserSingleton().fireUser == null
                       ? CircleAvatar(
-                    backgroundColor: Colors.blue,
-                  )
+                          backgroundColor: Colors.blue,
+                        )
                       : CircleAvatar(
-                      backgroundImage:
-                      NetworkImage(UserSingleton().fireUser.photoUrl)),
+                          backgroundImage:
+                              NetworkImage(UserSingleton().fireUser.photoUrl)),
                 ),
               ),
               ListTile(
@@ -62,8 +68,8 @@ class _HomePageState extends State<HomePage> {
               ListTile(
                 leading: Icon(Icons.person_add),
                 title: Text("Add Patient"),
-                onTap: (){
-                  Navigator.pushNamed(context, '/AddPatientPage');
+                onTap: () {
+                  Navigator.popAndPushNamed(context, '/AddPatientPage');
                 },
               ),
               ListTile(
@@ -77,9 +83,136 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-        body: Center(child: Text("Haha"))
+        body: SingleChildScrollView(
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
+                    Widget>[
+          ClipPath(
+            clipper: MyClipper(),
+            child: Container(
+              padding: const EdgeInsets.all(0),
+              height: 300,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topRight,
+                      end: Alignment.bottomLeft,
+                      colors: [Color(0xFF3383CD), Color(0xFF11249F)])),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Expanded(
+                    child: Stack(children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(left: 0, top: 50),
+                        child: SvgPicture.asset(
+                          "Assets/images/dr.svg",
+                          width: 230,
+                          fit: BoxFit.fitWidth,
+                          alignment: Alignment.topCenter,
+                        ),
+                      ),
+                      Positioned(
+                          top: 80,
+                          left: MediaQuery.of(context).size.width - 230,
+                          child: Text(
+                              "Welcome to the most low \npaying job of your life!",
+                              style: TextStyle(
+                                fontSize: 22,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                              ))),
+                      Container()
+                    ]),
+                  )
+                ],
+              ),
+            ),
+          ),
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    miniCard('Total Incidents \nOccured', 58),
+
+                    miniCard("Incidents in the \npast week", 18),
+                  ],
+                ),
+              ),
+              Row(
+                children: [
+                  Container(),
+                  Container(),
+                ],
+              ),
+            ],
+          )
+        ])));
+  }
+
+  Widget miniCard(String heading, int num){
+   return Card(
+      elevation: 4,
+      child: Container(
+        height: 110,
+        width: 160,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10)),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 12, top: 15),
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    child: SvgPicture.asset(
+                        "Assets/images/increase.svg"),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                    ),
+                    height: 12,
+                    width: 12,
+                  ),
+                  SizedBox(width: 12),
+                  Text(
+                    heading,
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Row(
+              children: [
+                Padding(
+                  padding:
+                  const EdgeInsets.only(left: 35, top: 10),
+                  child: RichText(
+                      text: TextSpan(children: [
+                        TextSpan(
+                            text: num.toString(),
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline6
+                                .copyWith(
+                                fontSize: 26,
+                                fontWeight: FontWeight.bold)),
+                      ])),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
     );
   }
+
 }
 
 class MessageHandler extends StatefulWidget {
@@ -113,5 +246,23 @@ class _MessageHandlerState extends State<MessageHandler> {
   @override
   Widget build(BuildContext context) {
     return null;
+  }
+}
+
+class MyClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    var path = Path();
+    path.lineTo(0, size.height - 80);
+    path.quadraticBezierTo(
+        size.width / 2, size.height, size.width, size.height - 80);
+    path.lineTo(size.width, 0);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) {
+    return false;
   }
 }

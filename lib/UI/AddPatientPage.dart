@@ -16,6 +16,7 @@ class _AddPatientPageState extends State<AddPatientPage> {
   var deviceIdController = TextEditingController();
   var roomNoController = TextEditingController();
   var relativeContactController = TextEditingController();
+  var bloodGroupController = TextEditingController();
   int currStep = 0;
 
   @override
@@ -27,6 +28,7 @@ class _AddPatientPageState extends State<AddPatientPage> {
     deviceIdController.dispose();
     roomNoController.dispose();
     relativeContactController.dispose();
+    bloodGroupController.dispose();
     super.dispose();
   }
 
@@ -112,6 +114,26 @@ class _AddPatientPageState extends State<AddPatientPage> {
                 icon: const Icon(Icons.menu),
                 labelStyle:
                     TextStyle(decorationStyle: TextDecorationStyle.solid)),
+          )),
+      Step(
+          title: const Text('Blood Group'),
+          isActive: true,
+          state: StepState.indexed,
+          content: TextFormField(
+            controller: bloodGroupController,
+            validator: (input) {
+              if (input.isEmpty) {
+                return "Please enter a valid blood group";
+              } else {
+                return null;
+              }
+            },
+            maxLines: 1,
+            decoration: InputDecoration(
+                labelText: 'Enter blood group',
+                icon: const Icon(Icons.local_hospital),
+                labelStyle:
+                TextStyle(decorationStyle: TextDecorationStyle.solid)),
           )),
       Step(
           title: const Text('Phone number'),
@@ -296,7 +318,6 @@ class _AddPatientPageState extends State<AddPatientPage> {
                 onStepTapped: (step) {
                   setState(() {
                     currStep = step;
-                    print(currStep);
                   });
                 },
                 controlsBuilder: currStep != (getSteps().length - 1)
@@ -324,11 +345,13 @@ class _AddPatientPageState extends State<AddPatientPage> {
                 'room_no': roomNoController.text,
                 'device_id': deviceIdController.text,
                 'phone_no': phoneNoController.text,
-                'relative_contact': relativeContactController.text
+                'relative_contact': relativeContactController.text,
+                'blood_group': bloodGroupController.text
               }).then((value) {
                 relativeContactController.clear();
                 phoneNoController.clear();
                 deviceIdController.clear();
+                bloodGroupController.clear();
                 roomNoController.clear();
                 genderController.clear();
                 ageController.clear();

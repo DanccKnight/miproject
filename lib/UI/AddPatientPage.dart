@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class AddPatientPage extends StatefulWidget {
   @override
@@ -110,7 +111,7 @@ class _AddPatientPageState extends State<AddPatientPage> {
                 labelText: 'Enter gender',
                 icon: const Icon(Icons.menu),
                 labelStyle:
-                TextStyle(decorationStyle: TextDecorationStyle.solid)),
+                    TextStyle(decorationStyle: TextDecorationStyle.solid)),
           )),
       Step(
           title: const Text('Phone number'),
@@ -122,7 +123,7 @@ class _AddPatientPageState extends State<AddPatientPage> {
             validator: (input) {
               if (input.isEmpty) {
                 return "Please enter the phone number";
-              } else if(input.length != 10){
+              } else if (input.length != 10) {
                 return 'Invalid number';
               } else {
                 return null;
@@ -133,13 +134,14 @@ class _AddPatientPageState extends State<AddPatientPage> {
                 labelText: 'Enter phone number',
                 icon: const Icon(Icons.phone),
                 labelStyle:
-                TextStyle(decorationStyle: TextDecorationStyle.solid)),
+                    TextStyle(decorationStyle: TextDecorationStyle.solid)),
           )),
       Step(
           title: const Text('Room no'),
           isActive: true,
           state: StepState.indexed,
           content: TextFormField(
+            keyboardType: TextInputType.numberWithOptions(),
             controller: roomNoController,
             validator: (input) {
               if (input.isEmpty) {
@@ -153,7 +155,7 @@ class _AddPatientPageState extends State<AddPatientPage> {
                 labelText: 'Enter room no',
                 icon: const Icon(Icons.room),
                 labelStyle:
-                TextStyle(decorationStyle: TextDecorationStyle.solid)),
+                    TextStyle(decorationStyle: TextDecorationStyle.solid)),
           )),
       Step(
           title: const Text('Device ID'),
@@ -173,7 +175,7 @@ class _AddPatientPageState extends State<AddPatientPage> {
                 labelText: 'Enter device id',
                 icon: const Icon(Icons.devices),
                 labelStyle:
-                TextStyle(decorationStyle: TextDecorationStyle.solid)),
+                    TextStyle(decorationStyle: TextDecorationStyle.solid)),
           )),
       Step(
           title: const Text('Relative Contact'),
@@ -185,7 +187,7 @@ class _AddPatientPageState extends State<AddPatientPage> {
             validator: (input) {
               if (input.isEmpty) {
                 return "Please enter your close relatives number";
-              } else if(input.length != 10){
+              } else if (input.length != 10) {
                 return 'Invalid number';
               } else {
                 return null;
@@ -196,7 +198,7 @@ class _AddPatientPageState extends State<AddPatientPage> {
                 labelText: 'Enter relatives number',
                 icon: const Icon(Icons.people),
                 labelStyle:
-                TextStyle(decorationStyle: TextDecorationStyle.solid)),
+                    TextStyle(decorationStyle: TextDecorationStyle.solid)),
           )),
     ];
   }
@@ -204,87 +206,138 @@ class _AddPatientPageState extends State<AddPatientPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        /*leading: GestureDetector(
-          onTap: () => Navigator.of(context).pop(),
-          child: Icon(
-            Icons.arrow_back,
-            color: Colors.black,
-          ),
-        ),*/
-        title: Text(
-          "Add new patient",
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            ClipPath(
+              clipper: MyClipper(),
+              child: Container(
+                padding: const EdgeInsets.all(0),
+                height: 320,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topRight,
+                        end: Alignment.bottomLeft,
+                        colors: [Color(0xFF3383CD), Color(0xFF11249F)])),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Expanded(
+                      child: Stack(children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20,top: 50),
+                          child: SvgPicture.asset("Assets/images/hmm.svg",
+                            width: 230,
+                            fit: BoxFit.fitWidth,
+                            alignment: Alignment.topCenter,
+                          ),
+                        ),
+                        Positioned(
+                          top: 100,
+                            left: MediaQuery.of(context).size.width - 210,
+                            child: Text("Be sure to fill all \nthe fields correctly!",style: TextStyle(
+                              fontSize: 22,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ))),
+                        Container()
+                      ]),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Form(
+              key: _formKey,
+              child: Stepper(
+                physics: NeverScrollableScrollPhysics(),
+                steps: getSteps(),
+                type: StepperType.vertical,
+                currentStep: this.currStep,
+                onStepContinue: () {
+                  setState(() {
+                    if (currStep < getSteps().length - 1) {
+                      currStep = currStep + 1;
+                    } else {
+                      currStep = 0;
+                    }
+                  });
+                },
+                onStepCancel: () {
+                  setState(() {
+                    if (currStep > 0) {
+                      currStep = currStep - 1;
+                    } else {
+                      currStep = 0;
+                    }
+                  });
+                },
+                onStepTapped: (step) {
+                  setState(() {
+                    currStep = step;
+                    print(currStep);
+                  });
+                },
+                controlsBuilder: currStep != (getSteps().length - 1)
+                    ? null
+                    : (BuildContext context,
+                            {VoidCallback onStepContinue,
+                            VoidCallback onStepCancel}) =>
+                        Container(),
+              ),
+            ),
+          ],
         ),
-      ),
-      body: Form(
-        key: _formKey,
-        child: ListView(
-      shrinkWrap: true,
-        children: <Widget>[
-      Stepper(
-        steps: getSteps(),
-        type: StepperType.vertical,
-        currentStep: this.currStep,
-        onStepContinue: () {
-          setState(() {
-            if (currStep < getSteps().length - 1) {
-              currStep = currStep + 1;
-            } else {
-              currStep = 0;
-            }
-          });
-        },
-        onStepCancel: () {
-          setState(() {
-            if (currStep > 0) {
-              currStep = currStep - 1;
-            } else {
-              currStep = 0;
-            }
-          });
-        },
-        onStepTapped: (step) {
-          setState(() {
-            currStep = step;
-            print(currStep);
-          });
-        },
-        controlsBuilder: currStep != (getSteps().length - 1)
-            ? null
-            : (BuildContext context,
-                    {VoidCallback onStepContinue,
-                    VoidCallback onStepCancel}) =>
-                Container(),
-      ),
-        ]),
       ),
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.check),
           onPressed: () async {
-              if(_formKey.currentState.validate()){
-                Firestore.instance.collection('Patients').document(deviceIdController.text).setData({
-                  'name': nameController.text,
-                  'age': ageController.text,
-                  'gender': genderController.text,
-                  'room_no': roomNoController.text,
-                  'device_id': deviceIdController.text,
-                  'phone_no': phoneNoController.text,
-                  'relative_contact': relativeContactController.text
-                }).then((value) {
-                  relativeContactController.clear();
-                  phoneNoController.clear();
-                  deviceIdController.clear();
-                  roomNoController.clear();
-                  genderController.clear();
-                  ageController.clear();
-                  nameController.clear();
-                  showSuccessMessage();
-                });
-              } else {
-                showAlert();
-              }
+            if (_formKey.currentState.validate()) {
+              Firestore.instance
+                  .collection('Patients')
+                  .document(deviceIdController.text)
+                  .setData({
+                'name': nameController.text,
+                'age': ageController.text,
+                'gender': genderController.text,
+                'room_no': roomNoController.text,
+                'device_id': deviceIdController.text,
+                'phone_no': phoneNoController.text,
+                'relative_contact': relativeContactController.text
+              }).then((value) {
+                relativeContactController.clear();
+                phoneNoController.clear();
+                deviceIdController.clear();
+                roomNoController.clear();
+                genderController.clear();
+                ageController.clear();
+                nameController.clear();
+                showSuccessMessage();
+              });
+            } else {
+              showAlert();
+            }
           }),
     );
   }
+}
 
+class MyClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    var path = Path();
+    path.lineTo(0, size.height - 80);
+    path.quadraticBezierTo(
+        size.width / 2, size.height, size.width, size.height - 80);
+    path.lineTo(size.width, 0);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) {
+    return false;
+  }
 }

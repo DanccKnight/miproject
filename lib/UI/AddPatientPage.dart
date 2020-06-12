@@ -39,6 +39,16 @@ class _AddPatientPageState extends State<AddPatientPage> {
         });
   }
 
+  showSuccessMessage() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: Text("Details uploaded successfully!"),
+          );
+        });
+  }
+
   List<Step> getSteps() {
     return [
       Step(
@@ -107,7 +117,7 @@ class _AddPatientPageState extends State<AddPatientPage> {
           isActive: true,
           state: StepState.indexed,
           content: TextFormField(
-            controller: ageController,
+            controller: phoneNoController,
             keyboardType: TextInputType.numberWithOptions(),
             validator: (input) {
               if (input.isEmpty) {
@@ -206,47 +216,48 @@ class _AddPatientPageState extends State<AddPatientPage> {
           "Add new patient",
         ),
       ),
-      body: SingleChildScrollView(
-          child: Form(
+      body: Form(
         key: _formKey,
-        child: ListView(children: <Widget>[
-          Stepper(
-            steps: getSteps(),
-            type: StepperType.vertical,
-            currentStep: this.currStep,
-            onStepContinue: () {
-              setState(() {
-                if (currStep < getSteps().length - 1) {
-                  currStep = currStep + 1;
-                } else {
-                  currStep = 0;
-                }
-              });
-            },
-            onStepCancel: () {
-              setState(() {
-                if (currStep > 0) {
-                  currStep = currStep - 1;
-                } else {
-                  currStep = 0;
-                }
-              });
-            },
-            onStepTapped: (step) {
-              setState(() {
-                currStep = step;
-                print(currStep);
-              });
-            },
-            controlsBuilder: currStep != (getSteps().length - 1)
-                ? null
-                : (BuildContext context,
-                        {VoidCallback onStepContinue,
-                        VoidCallback onStepCancel}) =>
-                    Container(),
-          ),
+        child: ListView(
+      shrinkWrap: true,
+        children: <Widget>[
+      Stepper(
+        steps: getSteps(),
+        type: StepperType.vertical,
+        currentStep: this.currStep,
+        onStepContinue: () {
+          setState(() {
+            if (currStep < getSteps().length - 1) {
+              currStep = currStep + 1;
+            } else {
+              currStep = 0;
+            }
+          });
+        },
+        onStepCancel: () {
+          setState(() {
+            if (currStep > 0) {
+              currStep = currStep - 1;
+            } else {
+              currStep = 0;
+            }
+          });
+        },
+        onStepTapped: (step) {
+          setState(() {
+            currStep = step;
+            print(currStep);
+          });
+        },
+        controlsBuilder: currStep != (getSteps().length - 1)
+            ? null
+            : (BuildContext context,
+                    {VoidCallback onStepContinue,
+                    VoidCallback onStepCancel}) =>
+                Container(),
+      ),
         ]),
-      )),
+      ),
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.check),
           onPressed: () async {
@@ -259,6 +270,15 @@ class _AddPatientPageState extends State<AddPatientPage> {
                   'device_id': deviceIdController.text,
                   'phone_no': phoneNoController.text,
                   'relative_contact': relativeContactController.text
+                }).then((value) {
+                  relativeContactController.clear();
+                  phoneNoController.clear();
+                  deviceIdController.clear();
+                  roomNoController.clear();
+                  genderController.clear();
+                  ageController.clear();
+                  nameController.clear();
+                  showSuccessMessage();
                 });
               } else {
                 showAlert();

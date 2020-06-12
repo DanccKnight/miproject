@@ -62,7 +62,9 @@ class _HomePageState extends State<HomePage> {
               ListTile(
                 leading: Icon(Icons.person_add),
                 title: Text("Add Patient"),
-                onTap: null,
+                onTap: (){
+                  Navigator.pushNamed(context, '/AddPatientPage');
+                },
               ),
               ListTile(
                 leading: Icon(Icons.exit_to_app),

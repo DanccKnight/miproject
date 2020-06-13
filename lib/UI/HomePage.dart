@@ -84,83 +84,124 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         body: SingleChildScrollView(
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
-                    Widget>[
-          ClipPath(
-            clipper: MyClipper(),
-            child: Container(
-              padding: const EdgeInsets.all(0),
-              height: 300,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topRight,
-                      end: Alignment.bottomLeft,
-                      colors: [Color(0xFF3383CD), Color(0xFF11249F)])),
-              child: Column(
+            child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Expanded(
-                    child: Stack(children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(left: 0, top: 50),
-                        child: SvgPicture.asset(
-                          "Assets/images/dr.svg",
-                          width: 230,
-                          fit: BoxFit.fitWidth,
-                          alignment: Alignment.topCenter,
-                        ),
-                      ),
-                      Positioned(
-                          top: 80,
-                          left: MediaQuery.of(context).size.width - 230,
-                          child: Text(
-                              "Welcome to the most low \npaying job of your life!",
-                              style: TextStyle(
-                                fontSize: 22,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                              ))),
-                      Container()
-                    ]),
-                  )
-                ],
-              ),
-            ),
-          ),
-          Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    miniCard('Total Incidents \nOccured', 58),
-
-                    miniCard("Incidents in the \npast week", 18),
-                  ],
+              ClipPath(
+                clipper: MyClipper(),
+                child: Container(
+                  padding: const EdgeInsets.all(0),
+                  height: 300,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          begin: Alignment.topRight,
+                          end: Alignment.bottomLeft,
+                          colors: [Color(0xFF3383CD), Color(0xFF11249F)])),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Expanded(
+                        child: Stack(children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.only(left: 0, top: 50),
+                            child: SvgPicture.asset(
+                              "Assets/images/dr.svg",
+                              width: 230,
+                              fit: BoxFit.fitWidth,
+                              alignment: Alignment.topCenter,
+                            ),
+                          ),
+                          Positioned(
+                              top: 80,
+                              left: MediaQuery.of(context).size.width - 230,
+                              child: Text(
+                                  "Welcome to the most low \npaying job of your life!",
+                                  style: TextStyle(
+                                    fontSize: 22,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                  ))
+                          ),
+                          Container()
+                        ]),
+                      )
+                    ],
+                  ),
                 ),
               ),
-              Row(
+              Column(
                 children: [
-                  Container(),
-                  Container(),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        miniCard('Total Incidents \nOccured', 58),
+                        miniCard("Incidents in the \npast week", 18),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Container(
+                      height: 160,
+                      width: double.infinity,
+                      child: Stack(
+                        alignment: Alignment.bottomLeft,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.only(
+                                left: MediaQuery.of(context).size.width * 0.4,
+                                top: 15),
+                            height: 140,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                  begin: Alignment.topRight,
+                                  end: Alignment.bottomLeft,
+                                  colors: [
+                                    Color(0xFF3383CD),
+                                    Color(0xFF11249F)
+                                  ]),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: RichText(
+                                text: TextSpan(children: [
+                              TextSpan(
+                                  text: "Dial 102 for \nmedical help!\n",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline6
+                                      .copyWith(color: Colors.white)),
+                              TextSpan(
+                                  text: "\nIn case of severe incidents",
+                                  style: TextStyle(
+                                      color: Colors.white.withOpacity(0.8)))
+                            ])),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 15),
+                            child: SvgPicture.asset("Assets/images/nurse.svg"),
+                          )
+                        ],
+                      ),
+                    ),
+                  )
                 ],
-              ),
-            ],
-          )
-        ])));
+              )
+            ])),
+    );
   }
 
-  Widget miniCard(String heading, int num){
-   return Card(
+  Widget miniCard(String heading, int num) {
+    return Card(
       elevation: 4,
       child: Container(
         height: 110,
         width: 160,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10)),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
         child: Column(
           children: [
             Padding(
@@ -168,8 +209,7 @@ class _HomePageState extends State<HomePage> {
               child: Row(
                 children: <Widget>[
                   Container(
-                    child: SvgPicture.asset(
-                        "Assets/images/increase.svg"),
+                    child: SvgPicture.asset("Assets/images/increase.svg"),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                     ),
@@ -191,19 +231,14 @@ class _HomePageState extends State<HomePage> {
             Row(
               children: [
                 Padding(
-                  padding:
-                  const EdgeInsets.only(left: 35, top: 10),
+                  padding: const EdgeInsets.only(left: 35, top: 10),
                   child: RichText(
                       text: TextSpan(children: [
-                        TextSpan(
-                            text: num.toString(),
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline6
-                                .copyWith(
-                                fontSize: 26,
-                                fontWeight: FontWeight.bold)),
-                      ])),
+                    TextSpan(
+                        text: num.toString(),
+                        style: Theme.of(context).textTheme.headline6.copyWith(
+                            fontSize: 26, fontWeight: FontWeight.bold)),
+                  ])),
                 ),
               ],
             )
@@ -212,7 +247,6 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
 }
 
 class MessageHandler extends StatefulWidget {

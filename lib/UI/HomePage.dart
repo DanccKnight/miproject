@@ -13,6 +13,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int currentIndex = 0;
+
   @override
   void initState() {
     if (UserSingleton().fireUser == null) {
@@ -27,171 +29,272 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        drawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.all(0),
+  Widget displayHome() {
+    return SingleChildScrollView(
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              UserAccountsDrawerHeader(
-                decoration: BoxDecoration(
-                    color: Color(0xFF11249F),
-                    gradient: LinearGradient(
-                        begin: Alignment.topRight,
-                        end: Alignment.bottomLeft,
-                        colors: [
-                          Color(0xFF3383CD),
-                          Colors.blue.withOpacity(0.85)
-                        ])),
-                accountName: UserSingleton().fireUser == null
-                    ? Text('name')
-                    : Text(UserSingleton().fireUser.displayName),
-                accountEmail: UserSingleton().fireUser == null
-                    ? Text('email')
-                    : Text(UserSingleton().fireUser.email),
-                currentAccountPicture: GestureDetector(
-                  child: UserSingleton().fireUser == null
-                      ? CircleAvatar(
-                          backgroundColor: Colors.blue,
-                        )
-                      : CircleAvatar(
-                          backgroundImage:
-                              NetworkImage(UserSingleton().fireUser.photoUrl)),
-                ),
-              ),
-              ListTile(
-                leading: Icon(Icons.info),
-                title: Text("About"),
-                onTap: null,
-              ),
-              ListTile(
-                leading: Icon(Icons.person_add),
-                title: Text("Add Patient"),
-                onTap: () {
-                  Navigator.popAndPushNamed(context, '/AddPatientPage');
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.exit_to_app),
-                title: Text("Sign out"),
-                onTap: () {
-                  Auth.logoutUser().then((value) => Navigator.of(context)
-                      .pushReplacementNamed('/SignInPage'));
-                },
-              ),
-            ],
-          ),
-        ),
-        body: SingleChildScrollView(
-            child: Column(
+          ClipPath(
+            clipper: MyClipper(),
+            child: Container(
+              padding: const EdgeInsets.all(0),
+              height: 300,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topRight,
+                      end: Alignment.bottomLeft,
+                      colors: [Color(0xFF3383CD), Color(0xFF11249F)])),
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-              ClipPath(
-                clipper: MyClipper(),
+                  Expanded(
+                    child: Stack(children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(left: 0, top: 50),
+                        child: SvgPicture.asset(
+                          "Assets/images/dr.svg",
+                          width: 230,
+                          fit: BoxFit.fitWidth,
+                          alignment: Alignment.topCenter,
+                        ),
+                      ),
+                      Positioned(
+                          top: 80,
+                          left: MediaQuery.of(context).size.width - 230,
+                          child: Text(
+                              "Welcome to the most low \npaying job of your life!",
+                              style: TextStyle(
+                                fontSize: 22,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                              ))),
+                      Container()
+                    ]),
+                  )
+                ],
+              ),
+            ),
+          ),
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    miniCard('Total Incidents \nOccured', 58),
+                    miniCard("Incidents in the \npast week", 18),
+                  ],
+                ),
+              ),
+              SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Container(
-                  padding: const EdgeInsets.all(0),
-                  height: 300,
+                  height: 175,
                   width: double.infinity,
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          begin: Alignment.topRight,
-                          end: Alignment.bottomLeft,
-                          colors: [Color(0xFF3383CD), Color(0xFF11249F)])),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Expanded(
-                        child: Stack(children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(left: 0, top: 50),
-                            child: SvgPicture.asset(
-                              "Assets/images/dr.svg",
-                              width: 230,
-                              fit: BoxFit.fitWidth,
-                              alignment: Alignment.topCenter,
-                            ),
-                          ),
-                          Positioned(
-                              top: 80,
-                              left: MediaQuery.of(context).size.width - 230,
-                              child: Text(
-                                  "Welcome to the most low \npaying job of your life!",
-                                  style: TextStyle(
-                                    fontSize: 22,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                  ))
-                          ),
-                          Container()
-                        ]),
+                  child: Stack(
+                    alignment: Alignment.bottomLeft,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.only(
+                            left: MediaQuery.of(context).size.width * 0.4,
+                            top: 15),
+                        height: 155,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              begin: Alignment.topRight,
+                              end: Alignment.bottomLeft,
+                              colors: [Color(0xFF3383CD), Color(0xFF11249F)]),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: RichText(
+                            text: TextSpan(children: [
+                          TextSpan(
+                              text: "Dial 102 for \nmedical help!\n",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  .copyWith(color: Colors.white)),
+                          TextSpan(
+                              text: "\nIn case of severe incidents",
+                              style: TextStyle(
+                                  color: Colors.white.withOpacity(0.8)))
+                        ])),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: SvgPicture.asset("Assets/images/nurse.svg"),
                       )
                     ],
                   ),
                 ),
-              ),
-              Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        miniCard('Total Incidents \nOccured', 58),
-                        miniCard("Incidents in the \npast week", 18),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Container(
-                      height: 160,
-                      width: double.infinity,
-                      child: Stack(
-                        alignment: Alignment.bottomLeft,
-                        children: [
-                          Container(
-                            padding: EdgeInsets.only(
-                                left: MediaQuery.of(context).size.width * 0.4,
-                                top: 15),
-                            height: 140,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                  begin: Alignment.topRight,
-                                  end: Alignment.bottomLeft,
-                                  colors: [
-                                    Color(0xFF3383CD),
-                                    Color(0xFF11249F)
-                                  ]),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: RichText(
-                                text: TextSpan(children: [
-                              TextSpan(
-                                  text: "Dial 102 for \nmedical help!\n",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline6
-                                      .copyWith(color: Colors.white)),
-                              TextSpan(
-                                  text: "\nIn case of severe incidents",
-                                  style: TextStyle(
-                                      color: Colors.white.withOpacity(0.8)))
-                            ])),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 15),
-                            child: SvgPicture.asset("Assets/images/nurse.svg"),
-                          )
-                        ],
-                      ),
-                    ),
-                  )
-                ],
               )
-            ])),
+            ],
+          )
+        ]));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.all(0),
+          children: <Widget>[
+            UserAccountsDrawerHeader(
+              decoration: BoxDecoration(
+                  color: Color(0xFF11249F),
+                  gradient: LinearGradient(
+                      begin: Alignment.topRight,
+                      end: Alignment.bottomLeft,
+                      colors: [
+                        Color(0xFF3383CD),
+                        Colors.blue.withOpacity(0.85)
+                      ])),
+              accountName: UserSingleton().fireUser == null
+                  ? Text('name')
+                  : Text(UserSingleton().fireUser.displayName),
+              accountEmail: UserSingleton().fireUser == null
+                  ? Text('email')
+                  : Text(UserSingleton().fireUser.email),
+              currentAccountPicture: GestureDetector(
+                child: UserSingleton().fireUser == null
+                    ? CircleAvatar(
+                        backgroundColor: Colors.blue,
+                      )
+                    : CircleAvatar(
+                        backgroundImage:
+                            NetworkImage(UserSingleton().fireUser.photoUrl)),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.info),
+              title: Text("About"),
+              onTap: null,
+            ),
+            ListTile(
+              leading: Icon(Icons.person_add),
+              title: Text("Add Patient"),
+              onTap: () {
+                Navigator.popAndPushNamed(context, '/AddPatientPage');
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.exit_to_app),
+              title: Text("Sign out"),
+              onTap: () {
+                Auth.logoutUser().then((value) =>
+                    Navigator.of(context).pushReplacementNamed('/SignInPage'));
+              },
+            ),
+          ],
+        ),
+      ),
+      body: currentIndex == 0
+          ? displayHome()
+          : currentIndex == 1
+              ? Center(child: Text("Patients"))
+              : displayAbout(),
+      bottomNavigationBar: BottomNavigationBar(
+          currentIndex: currentIndex,
+          elevation: 10,
+          onTap: (index) {
+            setState(() {
+              currentIndex = index;
+            });
+          },
+          items: [
+            BottomNavigationBarItem(
+              activeIcon: Icon(
+                Icons.home,
+                color: Colors.black,
+              ),
+              icon: Icon(Icons.home),
+              title: Text("Home",
+                  style: TextStyle(
+                      color: currentIndex == 0 ? Colors.black : Colors.grey)),
+            ),
+            BottomNavigationBarItem(
+                activeIcon: Icon(
+                  Icons.people,
+                  color: Colors.black,
+                ),
+                icon: Icon(
+                  Icons.people,
+                  color: Colors.grey,
+                ),
+                title: Text("Patients",
+                    style: TextStyle(
+                        color: currentIndex == 1 ? Colors.black : Colors.grey)),
+                backgroundColor: Colors.black),
+            BottomNavigationBarItem(
+                activeIcon: Icon(
+                  Icons.info,
+                  color: Colors.black,
+                ),
+                icon: Icon(
+                  Icons.info,
+                  color: Colors.grey,
+                ),
+                title: Text("About",
+                    style: TextStyle(
+                        color: currentIndex == 2 ? Colors.black : Colors.grey)),
+                backgroundColor: Colors.black)
+          ]),
+    );
+  }
+
+  Widget displayAbout() {
+    return SingleChildScrollView(
+      child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            ClipPath(
+              clipper: MyClipper(),
+              child: Container(
+                padding: const EdgeInsets.all(0),
+                height: 300,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topRight,
+                        end: Alignment.bottomLeft,
+                        colors: [Color(0xFF3383CD), Color(0xFF11249F)])),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Expanded(
+                      child: Stack(children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(left: 0, top: 50),
+                          child: SvgPicture.asset(
+                            "Assets/images/dr.svg",
+                            width: 230,
+                            fit: BoxFit.fitWidth,
+                            alignment: Alignment.topCenter,
+                          ),
+                        ),
+                        Positioned(
+                            top: 80,
+                            left: MediaQuery.of(context).size.width - 230,
+                            child: Text(
+                                "Get to know more\n about us",
+                                style: TextStyle(
+                                  fontSize: 22,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ))),
+                        Container()
+                      ]),
+                    )
+                  ],
+                ),
+              ),
+            )
+          ]),
     );
   }
 

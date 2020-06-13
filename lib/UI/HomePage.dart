@@ -609,7 +609,7 @@ class _HomePageState extends State<HomePage> {
             clipper: MyClipper(),
             child: Container(
               padding: const EdgeInsets.all(0),
-              height: 320,
+              height: 300,
               width: double.infinity,
               decoration: BoxDecoration(
                   gradient: LinearGradient(

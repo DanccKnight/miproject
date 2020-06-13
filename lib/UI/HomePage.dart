@@ -443,7 +443,10 @@ class _HomePageState extends State<HomePage> {
               itemBuilder: (context, index) {
                 return Padding(
                   padding: const EdgeInsets.all(15),
-                  child: Container(
+                  child: GestureDetector(
+                    onTap: (){
+                      Navigator.of(context).pushNamed('/DisplayVitalsPage');
+                    },
                     child: Card(
                         child: Column(
                       children: <Widget>[

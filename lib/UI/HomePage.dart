@@ -62,8 +62,7 @@ class _HomePageState extends State<HomePage> {
                       Positioned(
                           top: 80,
                           left: MediaQuery.of(context).size.width - 230,
-                          child: Text(
-                              "Welcome to our family \nof caretakers!",
+                          child: Text("Welcome to our family \nof caretakers!",
                               style: TextStyle(
                                 fontSize: 22,
                                 color: Colors.white,
@@ -195,9 +194,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: currentIndex == 0
           ? displayHome()
-          : currentIndex == 1
-              ? Center(child: Text("Patients"))
-              : displayAbout(),
+          : currentIndex == 1 ? displayPatients() : displayAbout(),
       bottomNavigationBar: BottomNavigationBar(
           currentIndex: currentIndex,
           elevation: 10,
@@ -313,7 +310,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Card(
                 elevation: 4,
                 child: Padding(
@@ -329,7 +326,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 25,top: 10),
+              padding: const EdgeInsets.only(left: 25, top: 10),
               child: Container(
                 height: 40,
                 width: 130,
@@ -348,7 +345,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Card(
                 elevation: 4,
                 child: Padding(
@@ -365,6 +362,117 @@ class _HomePageState extends State<HomePage> {
             )
           ]),
     );
+  }
+
+  Widget displayPatients() {
+    return SingleChildScrollView(
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
+            Widget>[
+      ClipPath(
+        clipper: MyClipper(),
+        child: Container(
+          padding: const EdgeInsets.all(0),
+          height: 300,
+          width: double.infinity,
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topRight,
+                  end: Alignment.bottomLeft,
+                  colors: [Color(0xFF3383CD), Color(0xFF11249F)])),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Expanded(
+                child: Stack(children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(left: 15, top: 60),
+                    child: SvgPicture.asset(
+                      "Assets/images/hmm.svg",
+                      width: 230,
+                      fit: BoxFit.fitWidth,
+                      alignment: Alignment.topCenter,
+                    ),
+                  ),
+                  Positioned(
+                      top: 80,
+                      left: MediaQuery.of(context).size.width - 230,
+                      child: Text("Monitor the health of \nthe elderly",
+                          style: TextStyle(
+                            fontSize: 22,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ))),
+                  Container()
+                ]),
+              )
+            ],
+          ),
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.only(left: 25),
+        child: Container(
+          height: 40,
+          width: 90,
+          decoration: BoxDecoration(
+              color: Colors.grey.withOpacity(0.12),
+              borderRadius: BorderRadius.circular(8)),
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Text("Patients",
+                style: TextStyle(
+                  fontSize: 22,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600,
+                )),
+          ),
+        ),
+      ),
+      StreamBuilder(
+        stream: Firestore.instance.collection('Patients').snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(child: CircularProgressIndicator());
+          }
+          return GridView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              gridDelegate:
+                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+              itemCount: snapshot.data.documents.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Container(
+                    child: Card(
+                        child: Column(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Container(
+                              height: 90,
+                              width: 90,
+                              child: snapshot.data.documents[index]["gender"] == "Male" ? SvgPicture.asset("Assets/images/male.svg") : SvgPicture.asset("Assets/images/female.svg")),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              bottom: 10, left: 10, right: 10),
+                          child: Text(snapshot.data.documents[index]["name"],
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  .copyWith(color: Colors.black,fontSize: 18
+                              )
+                          ),
+                        )
+                      ],
+                    )),
+                  ),
+                );
+              });
+        },
+      )
+    ]));
   }
 
   Widget miniCard(String heading, int num) {

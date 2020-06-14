@@ -105,8 +105,9 @@ class _HomePageState extends State<HomePage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    miniCard('Total Incidents \nOccured', 58),
-                    miniCard("Incidents in the \npast week", 18),
+                    miniCard('Total Incidents \nOccured', true),
+                    //bool value is to check which card it is, accordingly data is fetched
+                    miniCard("Incidents in the \npast week", false),
                   ],
                 ),
               ),
@@ -371,57 +372,72 @@ class _HomePageState extends State<HomePage> {
     ]));
   }
 
-  Widget miniCard(String heading, int num) {
-    return Card(
-      elevation: 4,
-      child: Container(
-        height: 110,
-        width: 160,
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 12, top: 15),
-              child: Row(
-                children: <Widget>[
-                  Container(
-                    child: SvgPicture.asset("Assets/images/increase.svg"),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
+  Widget miniCard(String heading, bool value) {
+    return StreamBuilder(
+        stream: Firestore.instance.collection('Notifications').snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(child: CircularProgressIndicator());
+          }
+          return Card(
+            elevation: 4,
+            child: Container(
+              height: 110,
+              width: 160,
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(10)),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 12, top: 15),
+                    child: Row(
+                      children: <Widget>[
+                        Container(
+                          child: SvgPicture.asset("Assets/images/increase.svg"),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                          ),
+                          height: 12,
+                          width: 12,
+                        ),
+                        SizedBox(width: 12),
+                        Text(
+                          heading,
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        )
+                      ],
                     ),
-                    height: 12,
-                    width: 12,
                   ),
-                  SizedBox(width: 12),
-                  Text(
-                    heading,
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600,
-                    ),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 35, top: 10),
+                        child: RichText(
+                            text: TextSpan(children: [
+                          TextSpan(
+                              text: value == true
+                                  ? snapshot.data.documents.length.toString()
+                                  : (snapshot.data.documents.length - 2)
+                                      .toString(),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  .copyWith(
+                                      fontSize: 26,
+                                      fontWeight: FontWeight.bold)),
+                        ])),
+                      ),
+                    ],
                   )
                 ],
               ),
             ),
-            Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 35, top: 10),
-                  child: RichText(
-                      text: TextSpan(children: [
-                    TextSpan(
-                        text: num.toString(),
-                        style: Theme.of(context).textTheme.headline6.copyWith(
-                            fontSize: 26, fontWeight: FontWeight.bold)),
-                  ])),
-                ),
-              ],
-            )
-          ],
-        ),
-      ),
-    );
+          );
+        });
   }
 }
 

@@ -62,13 +62,13 @@ class _DisplayVitalsPageState extends State<DisplayVitalsPage> {
             padding: const EdgeInsets.only(left: 25),
             child: Container(
               height: 40,
-              width: 130,
+              width: 70,
               decoration: BoxDecoration(
                   color: Colors.grey.withOpacity(0.12),
                   borderRadius: BorderRadius.circular(8)),
               child: Padding(
                 padding: const EdgeInsets.all(10),
-                child: Text("Temperature",
+                child: Text("Vitals",
                     style: TextStyle(
                       fontSize: 22,
                       color: Colors.black,
@@ -77,28 +77,145 @@ class _DisplayVitalsPageState extends State<DisplayVitalsPage> {
               ),
             ),
           ),
-          SizedBox(height: 120),
-          Padding(
-            padding: const EdgeInsets.only(left: 25),
-            child: Container(
-              height: 40,
-              width: 110,
-              decoration: BoxDecoration(
-                  color: Colors.grey.withOpacity(0.12),
-                  borderRadius: BorderRadius.circular(8)),
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: Text("Heart Rate",
-                    style: TextStyle(
-                      fontSize: 22,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600,
-                    )),
+          SizedBox(height: 20),
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: temperatureCard('Temperature', '36 °C'),
               ),
-            ),
+              Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: heartRateCard('Heart Rate', '73 BPM'),
+              )
+            ],
           ),
+          SizedBox(height: 70),
         ])));
   }
+
+  Widget temperatureCard(String heading, String temp){
+    return Card(
+      elevation: 4,
+      child: Container(
+        height: 110,
+        width: 160,
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 12, top: 15),
+                  child: Row(
+                    children: <Widget>[
+                      Container(
+                        child: SvgPicture.asset("Assets/images/increase.svg"),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                        ),
+                        height: 12,
+                        width: 12,
+                      ),
+                      SizedBox(width: 12),
+                      Text(
+                        heading,
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15,top: 10),
+                      child: RichText(
+                          text: TextSpan(children: [
+                            TextSpan(
+                                text: temp,
+                                style: Theme.of(context).textTheme.headline6.copyWith(
+                                    fontSize: 26, fontWeight: FontWeight.bold)),
+                          ])),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 15,bottom: 10),
+              child: MyBarChart(),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget heartRateCard(String heading, String num) {
+    return Card(
+      elevation: 4,
+      child: Container(
+        height: 110,
+        width: 160,
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 12, top: 15),
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    child: SvgPicture.asset("Assets/images/increase.svg"),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                    ),
+                    height: 12,
+                    width: 12,
+                  ),
+                  SizedBox(width: 12),
+                  Text(
+                    heading,
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 35, top: 10),
+                  child: RichText(
+                      text: TextSpan(children: [
+                        TextSpan(
+                            text: num,
+                            style: Theme.of(context).textTheme.headline6.copyWith(
+                                fontSize: 26, fontWeight: FontWeight.bold)),
+                      ])),
+                ),
+              ],
+            ),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Container(
+                height: 37,
+                  width: 70,
+                  child: LineReportChart()),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
 }
 
 class LineReportChart extends StatelessWidget {
@@ -128,18 +245,39 @@ class LineReportChart extends StatelessWidget {
 
   List<FlSpot> getSports() {
     return [
-      FlSpot(0, .5),
-      FlSpot(1, 1.5),
-      FlSpot(2, .5),
-      FlSpot(3, .7),
-      FlSpot(4, .2),
-      FlSpot(5, 2),
-      FlSpot(6, 1.5),
-      FlSpot(7, 1.7),
-      FlSpot(8, 1),
-      FlSpot(9, 2.8),
+      FlSpot(0, 1),
+      FlSpot(1, 1.3),
+      FlSpot(2, 1.23),
+      FlSpot(3, 1.33),
+      FlSpot(4, 1.61),
+      FlSpot(5, 1.59),
+      FlSpot(6, 1.88),
+      FlSpot(7, 1.9),
+      FlSpot(8, 1.95),
+      FlSpot(9, 2.4),
       FlSpot(10, 2.5),
-      FlSpot(11, 2.65),
+      FlSpot(11, 2.49),
     ];
+  }
+}
+
+class MyBarChart extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 10,top: 0),
+      child: Container(
+        height: 60,
+        width: 10,
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: Colors.grey.withOpacity(0.5)),
+        child: Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: Colors.red),
+            height: 36,
+          ),
+        ),
+      ),
+    );
   }
 }

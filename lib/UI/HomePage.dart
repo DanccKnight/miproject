@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:miproject/Data/Auth.dart';
 import 'package:miproject/Data/UserSingleton.dart';
+import 'package:miproject/UI/DisplayVitalsPage.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -83,7 +84,7 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.only(left: 30),
                   child: Container(
                     height: 40,
-                    width: 115,
+                    width: 119,
                     decoration: BoxDecoration(
                         color: Colors.grey.withOpacity(0.12),
                         borderRadius: BorderRadius.circular(8)),
@@ -305,7 +306,7 @@ class _HomePageState extends State<HomePage> {
         padding: const EdgeInsets.only(left: 25),
         child: Container(
           height: 40,
-          width: 90,
+          width: 100,
           decoration: BoxDecoration(
               color: Colors.grey.withOpacity(0.12),
               borderRadius: BorderRadius.circular(8)),
@@ -337,7 +338,12 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.all(15),
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.of(context).pushNamed('/DisplayVitalsPage');
+                      var docId = snapshot.data.documents[index].documentID;
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  DisplayVitalsPage(doc: docId)));
                     },
                     child: Card(
                         child: Column(
@@ -377,7 +383,7 @@ class _HomePageState extends State<HomePage> {
         stream: Firestore.instance.collection('Notifications').snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
+            return Container();
           }
           return Card(
             elevation: 4,

@@ -5,10 +5,10 @@ admin.initializeApp();
 const db = admin.firestore();
 const fcm = admin.messaging();
 
-    export const sendToTheAdmins = functions.firestore
+    export const sendNotificationToCaretakers = functions.firestore
     .document('Notifications/{notificationId}')
-    .onWrite(async snapshot => {
-        const patient = snapshot.after.data();
+    .onCreate(async snapshot => {
+        const patient = snapshot.data();
         var tokens = [];
 
         await db.collection('Admins').get()

@@ -55,7 +55,7 @@ class AboutPage extends StatelessWidget {
               padding: const EdgeInsets.only(left: 25),
               child: Container(
                 height: 40,
-                width: 130,
+                width: 140,
                 decoration: BoxDecoration(
                     color: Colors.grey.withOpacity(0.12),
                     borderRadius: BorderRadius.circular(8)),
@@ -90,7 +90,7 @@ class AboutPage extends StatelessWidget {
               padding: const EdgeInsets.only(left: 25, top: 10),
               child: Container(
                 height: 40,
-                width: 130,
+                width: 140,
                 decoration: BoxDecoration(
                     color: Colors.grey.withOpacity(0.12),
                     borderRadius: BorderRadius.circular(8)),

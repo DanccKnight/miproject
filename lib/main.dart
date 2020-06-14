@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:miproject/UI/AboutPage.dart';
+import 'package:miproject/UI/AddPatientPage.dart';
 import 'package:miproject/UI/HomePage.dart';
 import 'package:miproject/UI/SignInPage.dart';
 import 'package:miproject/UI/DisplayVitalsPage.dart';
@@ -43,7 +44,8 @@ class _MyAppState extends State<MyApp> {
         '/SignInPage': (BuildContext context) => SignInPage(),
         '/HomePage': (BuildContext context) => HomePage(),
         '/DisplayVitalsPage': (BuildContext context) => DisplayVitalsPage(),
-        '/AboutPage': (BuildContext context) => AboutPage()
+        '/AboutPage': (BuildContext context) => AboutPage(),
+        '/AddPatientPage': (BuildContext context) => AddPatientPage()
       },
     );
   }

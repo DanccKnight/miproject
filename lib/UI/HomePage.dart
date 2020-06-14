@@ -14,222 +14,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int currentIndex = 0;
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  var nameController = TextEditingController();
-  var ageController = TextEditingController();
-  var genderController = TextEditingController();
-  var phoneNoController = TextEditingController();
-  var deviceIdController = TextEditingController();
-  var roomNoController = TextEditingController();
-  var relativeContactController = TextEditingController();
-  var bloodGroupController = TextEditingController();
-  int currStep = 0;
-
-  @override
-  void dispose() {
-    nameController.dispose();
-    ageController.dispose();
-    genderController.dispose();
-    phoneNoController.dispose();
-    deviceIdController.dispose();
-    roomNoController.dispose();
-    relativeContactController.dispose();
-    bloodGroupController.dispose();
-    super.dispose();
-  }
-
-  showAlert() {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            content: Text("Please fill all the fields before uploading"),
-          );
-        });
-  }
-
-  showSuccessMessage() {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            content: Text("Details uploaded successfully!"),
-          );
-        });
-  }
-
-  List<Step> getSteps() {
-    return [
-      Step(
-          title: const Text('Name'),
-          isActive: true,
-          state: StepState.indexed,
-          content: TextFormField(
-            controller: nameController,
-            validator: (input) {
-              if (input.isEmpty) {
-                return "Please enter a name";
-              } else {
-                return null;
-              }
-            },
-            maxLines: 1,
-            decoration: InputDecoration(
-                labelText: 'Enter name',
-                icon: const Icon(Icons.person),
-                labelStyle:
-                TextStyle(decorationStyle: TextDecorationStyle.solid)),
-          )),
-      Step(
-          title: const Text('Age'),
-          isActive: true,
-          state: StepState.indexed,
-          content: TextFormField(
-            controller: ageController,
-            keyboardType: TextInputType.numberWithOptions(),
-            validator: (input) {
-              if (input.isEmpty) {
-                return "Please enter an age";
-              } else {
-                return null;
-              }
-            },
-            maxLines: 1,
-            decoration: InputDecoration(
-                labelText: 'Enter age',
-                icon: const Icon(Icons.drag_handle),
-                labelStyle:
-                TextStyle(decorationStyle: TextDecorationStyle.solid)),
-          )),
-      Step(
-          title: const Text('Gender'),
-          isActive: true,
-          state: StepState.indexed,
-          content: TextFormField(
-            controller: genderController,
-            validator: (input) {
-              if (input.isEmpty) {
-                return "Please enter your gender";
-              } else {
-                return null;
-              }
-            },
-            maxLines: 1,
-            decoration: InputDecoration(
-                labelText: 'Enter gender',
-                icon: const Icon(Icons.menu),
-                labelStyle:
-                TextStyle(decorationStyle: TextDecorationStyle.solid)),
-          )),
-      Step(
-          title: const Text('Blood Group'),
-          isActive: true,
-          state: StepState.indexed,
-          content: TextFormField(
-            controller: bloodGroupController,
-            validator: (input) {
-              if (input.isEmpty) {
-                return "Please enter a valid blood group";
-              } else {
-                return null;
-              }
-            },
-            maxLines: 1,
-            decoration: InputDecoration(
-                labelText: 'Enter blood group',
-                icon: const Icon(Icons.local_hospital),
-                labelStyle:
-                TextStyle(decorationStyle: TextDecorationStyle.solid)),
-          )),
-      Step(
-          title: const Text('Phone number'),
-          isActive: true,
-          state: StepState.indexed,
-          content: TextFormField(
-            controller: phoneNoController,
-            keyboardType: TextInputType.numberWithOptions(),
-            validator: (input) {
-              if (input.isEmpty) {
-                return "Please enter the phone number";
-              } else if (input.length != 10) {
-                return 'Invalid number';
-              } else {
-                return null;
-              }
-            },
-            maxLines: 1,
-            decoration: InputDecoration(
-                labelText: 'Enter phone number',
-                icon: const Icon(Icons.phone),
-                labelStyle:
-                TextStyle(decorationStyle: TextDecorationStyle.solid)),
-          )),
-      Step(
-          title: const Text('Room no'),
-          isActive: true,
-          state: StepState.indexed,
-          content: TextFormField(
-            keyboardType: TextInputType.numberWithOptions(),
-            controller: roomNoController,
-            validator: (input) {
-              if (input.isEmpty) {
-                return "Please enter the room no alloted";
-              } else {
-                return null;
-              }
-            },
-            maxLines: 1,
-            decoration: InputDecoration(
-                labelText: 'Enter room no',
-                icon: const Icon(Icons.room),
-                labelStyle:
-                TextStyle(decorationStyle: TextDecorationStyle.solid)),
-          )),
-      Step(
-          title: const Text('Device ID'),
-          isActive: true,
-          state: StepState.indexed,
-          content: TextFormField(
-            controller: deviceIdController,
-            validator: (input) {
-              if (input.isEmpty) {
-                return "Please enter the device id";
-              } else {
-                return null;
-              }
-            },
-            maxLines: 1,
-            decoration: InputDecoration(
-                labelText: 'Enter device id',
-                icon: const Icon(Icons.devices),
-                labelStyle:
-                TextStyle(decorationStyle: TextDecorationStyle.solid)),
-          )),
-      Step(
-          title: const Text('Relative Contact'),
-          isActive: true,
-          state: StepState.indexed,
-          content: TextFormField(
-            controller: relativeContactController,
-            keyboardType: TextInputType.numberWithOptions(),
-            validator: (input) {
-              if (input.isEmpty) {
-                return "Please enter your close relatives number";
-              } else if (input.length != 10) {
-                return 'Invalid number';
-              } else {
-                return null;
-              }
-            },
-            maxLines: 1,
-            decoration: InputDecoration(
-                labelText: 'Enter relatives number',
-                icon: const Icon(Icons.people),
-                labelStyle:
-                TextStyle(decorationStyle: TextDecorationStyle.solid)),
-          )),
-    ];
-  }
 
   @override
   void initState() {
@@ -293,6 +77,29 @@ class _HomePageState extends State<HomePage> {
           ),
           Column(
             children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 30),
+                  child: Container(
+                    height: 40,
+                    width: 115,
+                    decoration: BoxDecoration(
+                        color: Colors.grey.withOpacity(0.12),
+                        borderRadius: BorderRadius.circular(8)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Text("Dashboard",
+                          style: TextStyle(
+                            fontSize: 22,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600,
+                          )),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: Row(
@@ -346,7 +153,8 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-              )
+              ),
+              SizedBox(height: 20)
             ],
           )
         ]));
@@ -355,135 +163,96 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.all(0),
-          children: <Widget>[
-            UserAccountsDrawerHeader(
-              decoration: BoxDecoration(
-                  color: Color(0xFF11249F),
-                  gradient: LinearGradient(
-                      begin: Alignment.topRight,
-                      end: Alignment.bottomLeft,
-                      colors: [
-                        Color(0xFF3383CD),
-                        Colors.blue.withOpacity(0.85)
-                      ])),
-              accountName: UserSingleton().fireUser == null
-                  ? Text('name')
-                  : Text(UserSingleton().fireUser.displayName),
-              accountEmail: UserSingleton().fireUser == null
-                  ? Text('email')
-                  : Text(UserSingleton().fireUser.email),
-              currentAccountPicture: GestureDetector(
-                child: UserSingleton().fireUser == null
-                    ? CircleAvatar(
-                        backgroundColor: Colors.blue,
-                      )
-                    : CircleAvatar(
-                        backgroundImage:
-                            NetworkImage(UserSingleton().fireUser.photoUrl)),
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.all(0),
+            children: <Widget>[
+              UserAccountsDrawerHeader(
+                decoration: BoxDecoration(
+                    color: Color(0xFF11249F),
+                    gradient: LinearGradient(
+                        begin: Alignment.topRight,
+                        end: Alignment.bottomLeft,
+                        colors: [
+                          Color(0xFF3383CD),
+                          Colors.blue.withOpacity(0.85)
+                        ])),
+                accountName: UserSingleton().fireUser == null
+                    ? Text('name')
+                    : Text(UserSingleton().fireUser.displayName),
+                accountEmail: UserSingleton().fireUser == null
+                    ? Text('email')
+                    : Text(UserSingleton().fireUser.email),
+                currentAccountPicture: GestureDetector(
+                  child: UserSingleton().fireUser == null
+                      ? CircleAvatar(
+                          backgroundColor: Colors.blue,
+                        )
+                      : CircleAvatar(
+                          backgroundImage:
+                              NetworkImage(UserSingleton().fireUser.photoUrl)),
+                ),
               ),
-            ),
-            ListTile(
-              leading: Icon(Icons.info),
-              title: Text("About"),
-              onTap: (){
-                Navigator.of(context).popAndPushNamed('/AboutPage');
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.exit_to_app),
-              title: Text("Sign out"),
-              onTap: () {
-                Auth.logoutUser().then((value) =>
-                    Navigator.of(context).pushReplacementNamed('/SignInPage'));
-              },
-            ),
-          ],
+              ListTile(
+                leading: Icon(Icons.info),
+                title: Text("About"),
+                onTap: () {
+                  Navigator.of(context).popAndPushNamed('/AboutPage');
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.person_add),
+                title: Text("Add Patient"),
+                onTap: () {
+                  Navigator.of(context).popAndPushNamed('/AddPatientPage');
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.exit_to_app),
+                title: Text("Sign out"),
+                onTap: () {
+                  Auth.logoutUser().then((value) => Navigator.of(context)
+                      .pushReplacementNamed('/SignInPage'));
+                },
+              ),
+            ],
+          ),
         ),
-      ),
-      body: currentIndex == 0
-          ? displayHome()
-          : currentIndex == 1 ? displayPatients() : displayForm(),
-      floatingActionButton: currentIndex != 2 ? null : FloatingActionButton(
-          child: Icon(Icons.check),
-          onPressed: () async {
-            if (_formKey.currentState.validate()) {
-              Firestore.instance
-                  .collection('Patients')
-                  .document(deviceIdController.text)
-                  .setData({
-                'name': nameController.text,
-                'age': ageController.text,
-                'gender': genderController.text,
-                'room_no': roomNoController.text,
-                'device_id': deviceIdController.text,
-                'phone_no': phoneNoController.text,
-                'relative_contact': relativeContactController.text,
-                'blood_group': bloodGroupController.text
-              }).then((value) {
-                relativeContactController.clear();
-                phoneNoController.clear();
-                deviceIdController.clear();
-                bloodGroupController.clear();
-                roomNoController.clear();
-                genderController.clear();
-                ageController.clear();
-                nameController.clear();
-                showSuccessMessage();
+        body: currentIndex == 0 ? displayHome() : displayPatients(),
+        bottomNavigationBar: BottomNavigationBar(
+            currentIndex: currentIndex,
+            elevation: 10,
+            onTap: (index) {
+              setState(() {
+                currentIndex = index;
               });
-            } else {
-              showAlert();
-            }
-          }),
-      bottomNavigationBar: BottomNavigationBar(
-          currentIndex: currentIndex,
-          elevation: 10,
-          onTap: (index) {
-            setState(() {
-              currentIndex = index;
-            });
-          },
-          items: [
-            BottomNavigationBarItem(
-              activeIcon: Icon(
-                Icons.home,
-                color: Colors.black,
+            },
+            items: [
+              BottomNavigationBarItem(
+                activeIcon: Icon(
+                  Icons.home,
+                  color: Colors.black,
+                ),
+                icon: Icon(Icons.home),
+                title: Text("Home",
+                    style: TextStyle(
+                        color: currentIndex == 0 ? Colors.black : Colors.grey)),
               ),
-              icon: Icon(Icons.home),
-              title: Text("Home",
-                  style: TextStyle(
-                      color: currentIndex == 0 ? Colors.black : Colors.grey)),
-            ),
-            BottomNavigationBarItem(
-                activeIcon: Icon(
-                  Icons.people,
-                  color: Colors.black,
-                ),
-                icon: Icon(
-                  Icons.people,
-                  color: Colors.grey,
-                ),
-                title: Text("Patients",
-                    style: TextStyle(
-                        color: currentIndex == 1 ? Colors.black : Colors.grey)),
-                backgroundColor: Colors.black),
-            BottomNavigationBarItem(
-                activeIcon: Icon(
-                  Icons.person_add,
-                  color: Colors.black,
-                ),
-                icon: Icon(
-                  Icons.person_add,
-                  color: Colors.grey,
-                ),
-                title: Text("Add Patient",
-                    style: TextStyle(
-                        color: currentIndex == 2 ? Colors.black : Colors.grey)),
-                backgroundColor: Colors.black)
-          ]),
-    );
+              BottomNavigationBarItem(
+                  activeIcon: Icon(
+                    Icons.people,
+                    color: Colors.black,
+                  ),
+                  icon: Icon(
+                    Icons.people,
+                    color: Colors.grey,
+                  ),
+                  title: Text("Patients",
+                      style: TextStyle(
+                          color:
+                              currentIndex == 1 ? Colors.black : Colors.grey)),
+                  backgroundColor: Colors.black),
+            ]));
   }
 
   Widget displayPatients() {
@@ -566,7 +335,7 @@ class _HomePageState extends State<HomePage> {
                 return Padding(
                   padding: const EdgeInsets.all(15),
                   child: GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       Navigator.of(context).pushNamed('/DisplayVitalsPage');
                     },
                     child: Card(
@@ -577,7 +346,11 @@ class _HomePageState extends State<HomePage> {
                           child: Container(
                               height: 90,
                               width: 90,
-                              child: snapshot.data.documents[index]["gender"] == "Male" ? SvgPicture.asset("Assets/images/male.svg") : SvgPicture.asset("Assets/images/female.svg")),
+                              child: snapshot.data.documents[index]["gender"] ==
+                                      "Male"
+                                  ? SvgPicture.asset("Assets/images/male.svg")
+                                  : SvgPicture.asset(
+                                      "Assets/images/female.svg")),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(
@@ -586,9 +359,7 @@ class _HomePageState extends State<HomePage> {
                               style: Theme.of(context)
                                   .textTheme
                                   .headline6
-                                  .copyWith(color: Colors.black,fontSize: 18
-                              )
-                          ),
+                                  .copyWith(color: Colors.black, fontSize: 18)),
                         )
                       ],
                     )),
@@ -598,115 +369,6 @@ class _HomePageState extends State<HomePage> {
         },
       )
     ]));
-  }
-
-  Widget displayForm(){
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          ClipPath(
-            clipper: MyClipper(),
-            child: Container(
-              padding: const EdgeInsets.all(0),
-              height: 300,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topRight,
-                      end: Alignment.bottomLeft,
-                      colors: [Color(0xFF3383CD), Color(0xFF11249F)])),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Expanded(
-                    child: Stack(children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(left: 20, top: 50),
-                        child: SvgPicture.asset(
-                          "Assets/images/hmm.svg",
-                          width: 230,
-                          fit: BoxFit.fitWidth,
-                          alignment: Alignment.topCenter,
-                        ),
-                      ),
-                      Positioned(
-                          top: 100,
-                          left: MediaQuery.of(context).size.width - 210,
-                          child: Text(
-                              "Be sure to fill all \nthe fields correctly!",
-                              style: TextStyle(
-                                fontSize: 22,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                              ))),
-                      Container()
-                    ]),
-                  )
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 25),
-            child: Container(
-              height: 35,
-              width: 140,
-              decoration: BoxDecoration(
-                  color: Colors.grey.withOpacity(0.12),
-                  borderRadius: BorderRadius.circular(8)),
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: Text("Patient Details",
-                    style: TextStyle(
-                      fontSize: 22,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600,
-                    )),
-              ),
-            ),
-          ),
-          Form(
-            key: _formKey,
-            child: Stepper(
-              physics: NeverScrollableScrollPhysics(),
-              steps: getSteps(),
-              type: StepperType.vertical,
-              currentStep: this.currStep,
-              onStepContinue: () {
-                setState(() {
-                  if (currStep < getSteps().length - 1) {
-                    currStep = currStep + 1;
-                  } else {
-                    currStep = 0;
-                  }
-                });
-              },
-              onStepCancel: () {
-                setState(() {
-                  if (currStep > 0) {
-                    currStep = currStep - 1;
-                  } else {
-                    currStep = 0;
-                  }
-                });
-              },
-              onStepTapped: (step) {
-                setState(() {
-                  currStep = step;
-                });
-              },
-              controlsBuilder: currStep != (getSteps().length - 1)
-                  ? null
-                  : (BuildContext context,
-                  {VoidCallback onStepContinue,
-                    VoidCallback onStepCancel}) =>
-                  Container(),
-            ),
-          ),
-        ],
-      ),
-    );
   }
 
   Widget miniCard(String heading, int num) {
